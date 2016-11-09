@@ -6,8 +6,13 @@ require 'sinatra/activerecord'
 
 set :database, "sqlite3:pizzashop.db"
 
+after do
+  ActiveRecord::Base.clear_active_connections!
+end
+
 class Product < ActiveRecord::Base
 end
+
 
 get '/' do
 	@products = Product.all
