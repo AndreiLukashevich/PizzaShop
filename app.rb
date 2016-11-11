@@ -4,26 +4,40 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sinatra/activerecord'
 
+
 set :database, "sqlite3:pizzashop.db"
+
 
 after do
   ActiveRecord::Base.clear_active_connections!
 end
 
+
 class Product < ActiveRecord::Base
 end
 
+
 class Order < ActiveRecord::Base
 end
+
 
 get '/' do
 	@products = Product.all
 	erb :index
 end
 
+
 get '/about' do
 	erb :about
 end
+
+
+post '/place_order' do
+  @order = Order.create params[:order]
+
+  erb :order_placed
+end
+
 
 post '/cart' do
   @orders_input = params[:orders]
@@ -37,6 +51,8 @@ post '/cart' do
 
   erb :cart
 end
+
+
 
 def parse_orders_line orders_input
   s1 = orders_input.split(/,/)
